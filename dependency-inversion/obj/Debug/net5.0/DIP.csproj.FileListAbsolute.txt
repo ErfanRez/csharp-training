@@ -1,0 +1,16 @@
+C:\Users\Mohammad\source\repos\DIp\DIP\bin\Debug\net5.0\DIP.exe
+C:\Users\Mohammad\source\repos\DIp\DIP\bin\Debug\net5.0\DIP.deps.json
+C:\Users\Mohammad\source\repos\DIp\DIP\bin\Debug\net5.0\DIP.runtimeconfig.json
+C:\Users\Mohammad\source\repos\DIp\DIP\bin\Debug\net5.0\DIP.runtimeconfig.dev.json
+C:\Users\Mohammad\source\repos\DIp\DIP\bin\Debug\net5.0\DIP.dll
+C:\Users\Mohammad\source\repos\DIp\DIP\bin\Debug\net5.0\ref\DIP.dll
+C:\Users\Mohammad\source\repos\DIp\DIP\bin\Debug\net5.0\DIP.pdb
+C:\Users\Mohammad\source\repos\DIp\DIP\obj\Debug\net5.0\DIP.csproj.AssemblyReference.cache
+C:\Users\Mohammad\source\repos\DIp\DIP\obj\Debug\net5.0\DIP.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Mohammad\source\repos\DIp\DIP\obj\Debug\net5.0\DIP.AssemblyInfoInputs.cache
+C:\Users\Mohammad\source\repos\DIp\DIP\obj\Debug\net5.0\DIP.AssemblyInfo.cs
+C:\Users\Mohammad\source\repos\DIp\DIP\obj\Debug\net5.0\DIP.csproj.CoreCompileInputs.cache
+C:\Users\Mohammad\source\repos\DIp\DIP\obj\Debug\net5.0\DIP.dll
+C:\Users\Mohammad\source\repos\DIp\DIP\obj\Debug\net5.0\ref\DIP.dll
+C:\Users\Mohammad\source\repos\DIp\DIP\obj\Debug\net5.0\DIP.pdb
+C:\Users\Mohammad\source\repos\DIp\DIP\obj\Debug\net5.0\DIP.genruntimeconfig.cache
