@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ContactUs
@@ -20,7 +21,8 @@ namespace ContactUs
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    var assemblyName = typeof(Startup).GetTypeInfo().Assembly.FullName;
+                    webBuilder.UseStartup(assemblyName);
                 });
     }
 }
