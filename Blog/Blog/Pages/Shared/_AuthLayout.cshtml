@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" type="text/css" href="/auth/css/main.css" />
+</head>
+
+<body>
+    <div class="container">
+        <section id="content">
+            @RenderBody()
+        </section>
+
+        @await RenderSectionAsync("Scripts", false)
+    </div>
+</body>
+
+</html>

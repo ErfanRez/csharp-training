@@ -30,6 +30,6 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
-// app.MapGet("/", () => "Hello World!");
+//app.MapGet("/", () => { Console.WriteLine("Hello Erfan!"); });
 
 app.Run();
