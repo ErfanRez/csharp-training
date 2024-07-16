@@ -1,3 +1,4 @@
+using CoreLayer.Services.Users;
 using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,7 @@ var configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddDbContext<DB>(option =>
 {
     option.UseSqlServer(configuration.GetConnectionString("Default"));

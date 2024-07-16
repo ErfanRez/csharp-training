@@ -5,16 +5,19 @@
     ViewData["Title"] = "ثبت نام";
 }
 
-<form action="">
+<form action="post">
     <h1>@ViewData["Title"]</h1>
     <div>
-        <input type="text" placeholder="نام کاربری" required="" id="username" />
+        <input asp-for="Username" type="text" placeholder="نام کاربری" />
+        <span asp-validation-for="Username"></span>
     </div>
     <div>
-        <input type="text" placeholder="نام و نام خانوادگی" />
+        <input asp-for="Fullname" type="text" placeholder="نام و نام خانوادگی" />
+        <span asp-validation-for="Fullname"></span>
     </div>
     <div>
-        <input type="password" placeholder="کلمه عبور" required="" id="password" />
+        <input asp-for="Password" type="password" placeholder="کلمه عبور" />
+        <span asp-validation-for="Password"></span>
     </div>
     <div>
         <input type="submit" value="ثبت نام" />
