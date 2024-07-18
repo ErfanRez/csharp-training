@@ -39,6 +39,13 @@ namespace Blog.Pages.Auth
 
         public IActionResult OnPost()
         {
+
+            if(!ModelState.IsValid) 
+            {
+                return Page();
+
+            }
+
             var result = _userService.RegisterUser(new UserRegisterDto()
             {
                 Username = Username,
@@ -46,12 +53,13 @@ namespace Blog.Pages.Auth
                 Password = Password
             });
 
-            if(result.Status == OperationResultStatus.Error)
+            if (result.Status == OperationResultStatus.Error)
             {
                 ModelState.AddModelError("Username", result.Message);
                 return Page();
             }
             return RedirectToPage("Login");
+
         }
     }
 }

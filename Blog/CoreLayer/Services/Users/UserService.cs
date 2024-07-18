@@ -40,5 +40,16 @@ namespace CoreLayer.Services.Users
 
             return OperationResult.Success();
         }
+
+        public OperationResult LoginUser(LoginUserDto loginDto)
+        {
+            var hashedPwd = loginDto.Password.EncodeToMd5();
+            var user = _context.Users.Any(u => u.Username == loginDto.UserName && u.Password == hashedPwd);
+            
+
+            return user == false ? OperationResult.NotFound() : OperationResult.Success();
+
+            
+        }
     }
 }
