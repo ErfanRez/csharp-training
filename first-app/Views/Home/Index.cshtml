@@ -1,0 +1,47 @@
+﻿@model ContactUs.Models.Message
+
+<div class="container-login100" style="background-image: url('/images/bg-01.jpg')">
+    <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+        <form method="post" asp-controller="Home" asp-action="SendMessage" class="login100-form validate-form">
+            <span class="login100-form-title p-b-49">
+                تماس با ما
+            </span>
+            <div class="wrap-input100 validate-input m-b-23" data-validate="نام را وارد کنید">
+                <span class="label-input100">نام و نام خانوادگی</span>
+                <input asp-for="FullName" autocomplete="off" class="input100" type="text" placeholder="نام خود را وارد کنید">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-23" data-validate="موضوع پیام خود را مشخص کنید">
+                <span class="label-input100">موضوع پیام</span>
+                <input autocomplete="off" class="input100" type="text" asp-for="Subject" placeholder="موضوع پیام خورد را بنویسید">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-23" data-validate="شماره تماس را وارد کنید">
+                <span class="label-input100">شماره تماس</span>
+                <input autocomplete="off" class="input100" type="text" asp-for="PhoneNumber" placeholder="شماره تماس خود را وارد کنید">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-23" data-validate="متن پیام اجباری است">
+                <span class="label-input100">متن پیام</span>
+                <textarea autocomplete="off" class="input100" type="text" asp-for="MessageBody" placeholder="پیام خود را در این قسمت بنویسد">
+						</textarea>
+                <span class="focus-input100"></span>
+            </div>
+            <div class="container-login100-form-btn mt-4">
+                <div class="wrap-login100-form-btn">
+                    <div class="login100-form-bgbtn"></div>
+                    <button type="submit" class="login100-form-btn">
+                        ارسال
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        alert("Render Section Scripts");
+    </script>
+}
