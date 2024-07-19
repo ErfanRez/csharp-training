@@ -1,12 +1,7 @@
-﻿using CoreLayer.Utilities;
-using CoreLayer.DTOs.Users;
+﻿using CoreLayer.DTOs.Users;
+using CoreLayer.Utilities;
 using DAL.Context;
 using DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoreLayer.Services.Users
 {
@@ -41,15 +36,26 @@ namespace CoreLayer.Services.Users
             return OperationResult.Success();
         }
 
-        public OperationResult LoginUser(LoginUserDto loginDto)
+        public UserDto? LoginUser(LoginUserDto loginDto)
         {
             var hashedPwd = loginDto.Password.EncodeToMd5();
-            var user = _context.Users.Any(u => u.Username == loginDto.UserName && u.Password == hashedPwd);
-            
+            var user = _context.Users.FirstOrDefault(u => u.Username == loginDto.UserName && u.Password == hashedPwd);
 
-            return user == false ? OperationResult.NotFound() : OperationResult.Success();
+            if(user == null) return null;
 
-            
+            UserDto userDto = new()
+            {
+                Id = user.Id,
+                Fullname = user.Fullname,
+                Password = user.Password,
+                Role = user.Role,
+                Username = user.Username,
+                CreatedAt = user.CreatedAt,
+            };
+
+            return userDto;
+
+
         }
     }
 }

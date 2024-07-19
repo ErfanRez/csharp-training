@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using CoreLayer.DTOs.Users;
 using CoreLayer.Utilities;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Blog.Pages.Auth
 {
@@ -38,16 +41,32 @@ namespace Blog.Pages.Auth
                 return Page();
             }
 
-            var result = _userService.LoginUser(new LoginUserDto()
+            var user = _userService.LoginUser(new LoginUserDto()
             {
                 UserName = Username,
                 Password = Password,
             });
 
-            if(result.Status == OperationResultStatus.NotFound)
+            if(user == null)
             {
                 ModelState.AddModelError("Username", "User not found!");
+                return Page();
             }
+
+            List<Claim> claims = new List<Claim>()
+            {
+                new Claim("Test", "Test"),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Fullname.ToString()),
+            };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimPrincipal = new ClaimsPrincipal(identity);
+            var properties = new AuthenticationProperties()
+            {
+                AllowRefresh = true,
+                IsPersistent = true,
+            };
+            HttpContext.SignInAsync(claimPrincipal, properties);
 
             return RedirectToPage("../Index"); // return Redirect("/Index");
         }

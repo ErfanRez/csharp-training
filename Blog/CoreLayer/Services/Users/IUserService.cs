@@ -1,11 +1,5 @@
-﻿using CoreLayer.Utilities;
-using CoreLayer.DTOs.Users;
-using DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CoreLayer.DTOs.Users;
+using CoreLayer.Utilities;
 
 namespace CoreLayer.Services.Users
 {
@@ -13,6 +7,6 @@ namespace CoreLayer.Services.Users
     {
         OperationResult RegisterUser(UserRegisterDto registerDto);
 
-        OperationResult LoginUser(LoginUserDto loginUserDto);
+        UserDto? LoginUser(LoginUserDto loginUserDto);
     }
 }
