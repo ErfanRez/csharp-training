@@ -1,6 +1,7 @@
 using CoreLayer.Services.Users;
 using DAL.Context;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,10 @@ var configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Add MVC services.
+builder.Services.AddControllersWithViews();
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddAuthentication(option =>
 {
@@ -44,7 +49,30 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Map controller routes for MVC Areas
+app.MapControllerRoute(
+    name: "Default",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
+
+//Or:
+
+//app.UseEndpoints(endpoints =>
+//{
+//    // Map controller routes for MVC Areas
+//    endpoints.MapControllerRoute(
+//        name: "areas",
+//        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+//    endpoints.MapAreaControllerRoute(
+//        name: "AdminPanel",
+//        areaName: "Admin",
+//        pattern: "CustomRoute/{controller=Home}/{action=Index}/{id?}");
+
+//    // Map Razor Pages
+//    endpoints.MapRazorPages();
+//});
 
 //app.MapGet("/", () => { Console.WriteLine("Hello Erfan!"); });
 
