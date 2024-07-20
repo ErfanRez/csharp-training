@@ -1,4 +1,5 @@
-﻿using CoreLayer.Services.Categories;
+﻿using Blog.Areas.Admin.Models.Categories;
+using CoreLayer.Services.Categories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Areas.Admin.Controllers
@@ -21,6 +22,13 @@ namespace Blog.Areas.Admin.Controllers
         public IActionResult Add()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Add(CreateCategoryModel categoryModel)
+        {
+            var result = _categoryService.CreateCategory(categoryModel.MapToDto());
+            return Redirect("Index");
         }
 
         public IActionResult Edit()

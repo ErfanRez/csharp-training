@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "دستع بندی ها";
+﻿@model Areas.Admin.Models.Categories.CreateCategoryModel
+@{
+    ViewData["Title"] = "Add Category";
     int counter = 1;
 }
 
@@ -14,5 +15,40 @@
 </section>
 
 <section>
+    <form class="box box-body row"method="post" asp-action="Add" asp-area="Admin" asp-controller="Category">
+        <div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Title"></label>
+                    <input asp-for="Title" class="form-control"/>
+                    <span asp-validation-for="Title"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Slug"></label>
+                    <input asp-for="Slug" class="form-control" />
+                    <span asp-validation-for="Slug"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="MetaTag"></label>
+                    <input asp-for="MetaTag" class="form-control" />
+                    <span asp-validation-for="MetaTag"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="MetaDescription"></label>
+                    <textarea asp-for="MetaDescription" class="form-control"></textarea>
+                    <span asp-validation-for="MetaDescription"></span>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-success" type="submit">Save</button>
+        </div>
+    </form>
 
 </section>

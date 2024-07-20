@@ -2308,10 +2308,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\admin\bower_components\.DS_Store" />
     <None Include="wwwroot\admin\bower_components\bootstrap-colorpicker\CONTRIBUTING.md" />
     <None Include="wwwroot\admin\bower_components\bootstrap-colorpicker\dist\css\bootstrap-colorpicker.css.map" />

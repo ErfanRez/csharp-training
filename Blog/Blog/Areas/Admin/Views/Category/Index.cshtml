@@ -1,7 +1,7 @@
 ﻿@model List<CoreLayer.DTOs.Categories.CategoryDto>
 
 @{
-    ViewData["Title"] = "دستع بندی ها";
+    ViewData["Title"] = "Categories";
     int counter = 1;
 }
 
@@ -16,7 +16,7 @@
 </section>
 
 <section>
-    <a class="btn btn-succes mb-2" asp-area="Admin" asp-controller="Category" asp-action="Add">Add New</a>
+    <a class="btn btn-outline-success" asp-area="Admin" asp-controller="Category" asp-action="Add">Add New</a>
     <div class="box box-body">
         <table class="table table-bordered table-hover">
             <thead>
