@@ -1,5 +1,7 @@
 ﻿using Blog.Areas.Admin.Models.Categories;
+using CoreLayer.DTOs.Categories;
 using CoreLayer.Services.Categories;
+using CoreLayer.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Areas.Admin.Controllers
@@ -28,12 +30,44 @@ namespace Blog.Areas.Admin.Controllers
         public IActionResult Add(CreateCategoryModel categoryModel)
         {
             var result = _categoryService.CreateCategory(categoryModel.MapToDto());
-            return Redirect("Index");
+            return RedirectToAction("Index");
         }
 
-        public IActionResult Edit()
+
+        public IActionResult Edit(int id)
         {
-            return View();
+            var category = _categoryService.GetCategoryBy(id);
+            if (category == null) return RedirectToAction("Index");
+            var model = new EditCategoryModel()
+            {
+                Title = category.Title,
+                Slug = category.Slug,
+                MetaTag = category.MetaTag,
+                MetaDescription = category.MetaDescription,
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, EditCategoryModel model)
+        {
+            var result = _categoryService.EditCategory(new EditCategoryDto()
+            {
+                Id = id,
+                Title = model.Title,
+                Slug = model.Slug,
+                MetaTag = model.MetaTag,
+                MetaDescription = model.MetaDescription,
+            });
+
+            if (result.Status != OperationResultStatus.Success)
+            {
+                ModelState.AddModelError(nameof(model.Title), result.Message);
+                return View();
+            }
+            return RedirectToAction("Index");
         }
     }
 }
