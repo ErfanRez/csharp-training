@@ -1,0 +1,46 @@
+﻿@model List<CoreLayer.DTOs.Categories.CategoryDto>
+
+@{
+    ViewData["Title"] = "دستع بندی ها";
+    int counter = 1;
+}
+
+<section class="content-header">
+    <h1>
+        @ViewData["Title"]
+    </h1>
+    <ol class="breadcrumb">
+        <li><a asp-area="Admin" asp-controller="Category" asp-action="Index"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active">@ViewData["Title"]</li>
+    </ol>
+</section>
+
+<section>
+    <a class="btn btn-succes mb-2" asp-area="Admin" asp-controller="Category" asp-action="Add">Add New</a>
+    <div class="box box-body">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Subject</th>
+                    <th>Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>@counter</td>
+                        <td>@item.Title</td>
+                        <td></td>
+                        <td>
+                            <a asp-area="Admin" asp-controller="Category" asp-action="Edit" class="btn btn-info btn-sm">Edit</a>
+                        </td>
+                    </tr>
+
+                    counter++;
+                }
+            </tbody>
+        </table>
+    </div>
+</section>

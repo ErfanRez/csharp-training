@@ -18,6 +18,8 @@ namespace DAL.Entities
         [AllowNull]
         public string MetaDescription { get; set; }
 
+        public int? ParentId { get; set; }
+
 
         #region Relations
 
