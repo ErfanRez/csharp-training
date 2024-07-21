@@ -17,6 +17,12 @@ namespace CoreLayer.Services.Categories
 
         public OperationResult CreateCategory(CreateCategoryDto command)
         {
+
+            if (this.SlugExist(command.Slug.ToSlug()))
+            {
+                return OperationResult.Error("Slug exists!");
+            }
+
             var category = new Category()
             {
                 IsDeleted = false,
@@ -24,7 +30,7 @@ namespace CoreLayer.Services.Categories
                 MetaTag = command.MetaTag,
                 MetaDescription = command.MetaDescription,
                 ParentId = command.ParentId,
-                Slug = command.Slug,
+                Slug = command.Slug.ToSlug(),
                 CreatedAt = DateTime.Now,
 
 
@@ -43,10 +49,15 @@ namespace CoreLayer.Services.Categories
 
             if (category == null) return OperationResult.NotFound();
 
+            if (command.Slug.ToSlug() != category.Slug && this.SlugExist(command.Slug.ToSlug()))
+            {
+                return OperationResult.Error("Slug exists!");
+            }
+
             category.Title = command.Title;
             category.MetaTag = command.MetaTag;
             category.MetaDescription = command.MetaDescription;
-            category.Slug = command.Slug;
+            category.Slug = command.Slug.ToSlug();
 
             _context.SaveChanges();
 
@@ -75,6 +86,12 @@ namespace CoreLayer.Services.Categories
 
             return CategoryMapper.Map(category);
         }
+
+        public bool SlugExist(string slug)
+        {
+            return _context.Categories.Any(c => c.Slug == slug.ToSlug());
+        }
+
     }
 
 }

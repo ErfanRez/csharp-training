@@ -30,6 +30,13 @@ namespace Blog.Areas.Admin.Controllers
         public IActionResult Add(CreateCategoryModel categoryModel)
         {
             var result = _categoryService.CreateCategory(categoryModel.MapToDto());
+
+            if (result.Status != OperationResultStatus.Success)
+            {
+                ModelState.AddModelError(nameof(categoryModel.Title), result.Message);
+                return View();
+            }
+
             return RedirectToAction("Index");
         }
 

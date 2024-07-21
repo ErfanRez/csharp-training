@@ -14,6 +14,8 @@ namespace CoreLayer.Services.Categories
         CategoryDto? GetCategoryBy(int id);
 
         CategoryDto? GetCategoryBy(string slug);
+
+        bool SlugExist(string slug);
     }
 
 }
