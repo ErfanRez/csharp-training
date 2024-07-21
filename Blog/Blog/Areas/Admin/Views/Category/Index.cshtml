@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Categories";
     int counter = 1;
+    ViewData["Selected"] = "category";
 }
 
 <section class="content-header">
@@ -23,18 +24,36 @@
                 <tr>
                     <th>#</th>
                     <th>Subject</th>
-                    <th>Operation</th>
+                    <th>Sub Cat</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach(var item in Model)
+                @foreach (var item in Model.Where(m => m.ParentId == null))
                 {
                     <tr>
                         <td>@counter</td>
                         <td>@item.Title</td>
-                        <td></td>
+                        <td>
+                            @if(Model.Any(r => r.ParentId == item.Id))
+                            {
+                                <ul>
+                                    @foreach(var sub in Model.Where(m=> m.ParentId == item.Id))
+                                    {
+                                        <li>
+                                            @sub.Title
+                                            <span>
+                                                <a asp-area="Admin" asp-controller="Category" asp-action="Edit" asp-route-id="@sub.Id" class="btn btn-info btn-sm">Edit</a>
+                                            </span>
+                                        </li>
+                                        
+                                    }
+                                </ul>
+                            }
+                            
+                        </td>
                         <td>
                             <a asp-area="Admin" asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a>
+                            <a asp-area="Admin" asp-controller="Category" asp-action="Add" asp-route-parentId="@item.Id" class="btn btn-success btn-sm">Add Sub</a>
                         </td>
                     </tr>
 

@@ -21,14 +21,17 @@ namespace Blog.Areas.Admin.Controllers
             return View(_categoryService.GetAllCategories());
         }
 
-        public IActionResult Add()
+        [Route("/admin/category/add/{parentId?}")]
+        public IActionResult Add(int? parentId)
         {
+
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Add(CreateCategoryModel categoryModel)
+        [HttpPost("/admin/category/add/{parentId?}")]
+        public IActionResult Add(int? parentId, CreateCategoryModel categoryModel)
         {
+            categoryModel.ParentId = parentId;
             var result = _categoryService.CreateCategory(categoryModel.MapToDto());
 
             if (result.Status != OperationResultStatus.Success)
