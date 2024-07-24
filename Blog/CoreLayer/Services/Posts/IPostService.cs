@@ -11,6 +11,8 @@ namespace CoreLayer.Services.Posts
 
         PostDto GetPostById(int id);
 
+        PostFilterDto GetPostByFilter(PostFilterParams filterParams);
+
         bool SlugExist(string slug);
     }
 }

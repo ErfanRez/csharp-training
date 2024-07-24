@@ -47,5 +47,26 @@ namespace CoreLayer.Services.Posts
         {
             return _context.Posts.Any(p => p.Slug == slug.ToSlug());
         }
+
+        PostFilterDto IPostService.GetPostByFilter(PostFilterParams filterParams)
+        {
+            var result = _context.Posts.OrderBy(p => p.CreatedAt).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filterParams.CategorySlug)) result = result.Where(p => p.Category.Slug == filterParams.CategorySlug);
+
+            if (!string.IsNullOrWhiteSpace(filterParams.Title)) result = result.Where(p => p.Title.Contains(filterParams.Title));
+
+            var skip = (filterParams.PageId - 1) * filterParams.Take;
+            var pageCount = result.Count() / filterParams.Take;
+
+            return new PostFilterDto()
+            {
+                Posts = result.Skip(skip).Take(filterParams.Take).Select(p => PostMapper.MapToDto(p)).ToList(),
+                FilterParams = filterParams,
+                PageCount = pageCount
+            };
+
+
+        }
     }
 }
