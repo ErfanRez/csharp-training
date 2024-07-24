@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DAL.Entities
@@ -23,8 +24,11 @@ namespace DAL.Entities
 
         #region Relations
 
-        [AllowNull]
+        [InverseProperty("Category")]
         public ICollection<Post> Posts { get; set; }
+
+        [InverseProperty("SubCategory")]
+        public ICollection<Post> SubPosts { get; set; }
 
         #endregion
     }

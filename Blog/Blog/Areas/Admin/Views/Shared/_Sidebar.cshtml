@@ -32,6 +32,10 @@
                 <a asp-area="Admin" asp-controller="Category" asp-action="Index">
                     <i class="fa fa-th"></i> <span>Categories</span>
                 </a>
+            </li><li class="@(selected == "post" ? "active" : null)">
+                <a asp-area="Admin" asp-controller="Post" asp-action="Index">
+                    <i class="fa fa-th"></i> <span>Posts</span>
+                </a>
             </li>
         </ul>
     </section>

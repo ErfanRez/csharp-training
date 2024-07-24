@@ -36,6 +36,11 @@ namespace DAL.Entities
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
+        public int? SubCategoryId { get; set; }
+
+        [ForeignKey("SubCategoryId")]
+        public Category SubCategory { get; set; }
+
         [AllowNull]
         public ICollection<PostComment> PostComments { get; set; }
 

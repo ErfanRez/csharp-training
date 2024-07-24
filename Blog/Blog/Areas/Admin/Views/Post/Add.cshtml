@@ -1,0 +1,77 @@
+﻿@model Areas.Admin.Models.Posts.CreatePostModel
+
+@{
+    ViewData["Title"] = "Add Post";
+    ViewData["Selected"] = "post";
+    int counter = 1;
+}
+
+<section class="content-header">
+    <h1>
+        @ViewData["Title"]
+    </h1>
+    <ol class="breadcrumb">
+        <li><a asp-area="Admin" asp-controller="Home" asp-action="Index"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li><a asp-area="Admin" asp-controller="Post" asp-action="Index"><i class="fa fa-dashboard"></i>Posts</a></li>
+        <li class="active">@ViewData["Title"]</li>
+    </ol>
+</section>
+
+<section>
+    <form class="box box-body row"method="post" asp-action="Add" asp-area="Admin" asp-controller="Category">
+        <div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Title"></label>
+                    <input asp-for="Title" class="form-control"/>
+                    <span asp-validation-for="Title"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Slug"></label>
+                    <input asp-for="Slug" class="form-control" />
+                    <span asp-validation-for="Slug"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <textarea asp-for="Description" class="form-control" id="ckEditor"></textarea>
+                    <span asp-validation-for="Description"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div>
+                        <label asp-for="CategoryId"></label>
+                        <select asp-for="CategoryId" class="form-control">
+                        </select>
+                        <span asp-validation-for="CategoryId"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div>
+                        <label asp-for="SubCategoryId"></label>
+                        <select asp-for="SubCategoryId" class="form-control">
+                        </select>
+                        <span asp-validation-for="SubCategoryId"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="ImageFile"></label>
+                    <input type="file" asp-for="ImageFile" class="form-control" />
+                    <span asp-validation-for="ImageFile"></span>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-success" type="submit">Save</button>
+        </div>
+    </form>
+
+</section>
