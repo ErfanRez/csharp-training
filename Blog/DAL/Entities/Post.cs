@@ -20,7 +20,10 @@ namespace DAL.Entities
         [Required]
         public string Slug { get; set; }
 
-        
+        [AllowNull]
+        public string? Image { get; set; }
+
+
         #region Relations
 
         public int UserId { get; set; }
