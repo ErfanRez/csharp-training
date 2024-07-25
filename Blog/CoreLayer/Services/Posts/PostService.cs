@@ -1,5 +1,6 @@
 ﻿using CoreLayer.DTOs.Posts;
 using CoreLayer.Mappers;
+using CoreLayer.Services.FileManager;
 using CoreLayer.Utilities;
 using DAL.Context;
 
@@ -8,15 +9,23 @@ namespace CoreLayer.Services.Posts
     public class PostService : IPostService
     {
         private readonly DB _context;
+        private readonly IFileManager _fileManger;
 
-        public PostService(DB context)
+        public PostService(DB context, IFileManager fileManager)
         {
             _context = context;
+            _fileManger = fileManager;
         }
 
         public OperationResult CreatePost(CreatePostDto command)
         {
+            if (command.Image == null)
+            {
+                return OperationResult.Error();
+            }
             var post = PostMapper.CreateMapper(command);
+            post.Image = _fileManger.SaveFile(command.Image, Directories.PostImage);
+
             _context.Posts.Add(post);
             _context.SaveChanges();
 

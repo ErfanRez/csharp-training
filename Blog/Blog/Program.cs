@@ -1,4 +1,5 @@
 using CoreLayer.Services.Categories;
+using CoreLayer.Services.FileManager;
 using CoreLayer.Services.Posts;
 using CoreLayer.Services.Users;
 using DAL.Context;
@@ -17,6 +18,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddTransient<IFileManager, FileManager>();
 builder.Services.AddAuthentication(option =>
 {
     option.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme; // "Cookies"
