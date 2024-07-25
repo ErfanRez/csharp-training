@@ -11,6 +11,8 @@ namespace CoreLayer.Services.Categories
 
         List<CategoryDto> GetAllCategories();
 
+        List<CategoryDto> GetChildCategories(int parentId);
+
         CategoryDto? GetCategoryBy(int id);
 
         CategoryDto? GetCategoryBy(string slug);

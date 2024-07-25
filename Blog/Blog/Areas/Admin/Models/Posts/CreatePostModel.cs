@@ -29,6 +29,6 @@ namespace Blog.Areas.Admin.Models.Posts
 
         [Display(Name = "SubCategory")]
         [Required(ErrorMessage = "{0} is required!")]
-        public int? SubCategoryId { get; set; }
+        public int SubCategoryId { get; set; }
     }
 }

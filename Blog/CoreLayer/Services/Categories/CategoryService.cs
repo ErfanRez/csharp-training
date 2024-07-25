@@ -69,6 +69,11 @@ namespace CoreLayer.Services.Categories
             return _context.Categories.Where(c => c.IsDeleted == false).Select(c => CategoryMapper.Map(c)).ToList();
         }
 
+        public List<CategoryDto> GetChildCategories(int parentId)
+        {
+            return _context.Categories.Where(c => c.ParentId == parentId).Select(c => CategoryMapper.Map(c)).ToList();
+        }
+
         public CategoryDto? GetCategoryBy(int id)
         {
             var category = _context.Categories.FirstOrDefault(c => c.Id == id);

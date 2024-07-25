@@ -3,6 +3,7 @@ using CoreLayer.Mappers;
 using CoreLayer.Services.FileManager;
 using CoreLayer.Utilities;
 using DAL.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoreLayer.Services.Posts
 {
@@ -59,7 +60,11 @@ namespace CoreLayer.Services.Posts
 
         PostFilterDto IPostService.GetPostByFilter(PostFilterParams filterParams)
         {
-            var result = _context.Posts.OrderBy(p => p.CreatedAt).AsQueryable();
+            var result = _context.Posts
+                .Include(p => p.Category)
+                .Include(p => p.SubCategory)
+                .OrderBy(p => p.CreatedAt)
+                .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(filterParams.CategorySlug)) result = result.Where(p => p.Category.Slug == filterParams.CategorySlug);
 

@@ -1,5 +1,7 @@
-﻿using CoreLayer.DTOs.Posts;
+﻿using Blog.Areas.Admin.Models.Posts;
+using CoreLayer.DTOs.Posts;
 using CoreLayer.Services.Posts;
+using CoreLayer.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Areas.Admin.Controllers
@@ -34,9 +36,27 @@ namespace Blog.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Add(string t)
+        public IActionResult Add(CreatePostModel model)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = _postService.CreatePost(new CreatePostDto()
+            {
+                CategoryId = model.CategoryId,
+                Title = model.Title,
+                Description = model.Description,
+                Slug = model.Slug,
+                SubCategoryId = model.SubCategoryId,
+                Image = model.ImageFile,
+                UserId = User.GetUserId(),
+            });
+
+            if (result.Status != OperationResultStatus.Success)
+                return View();
+
+            return RedirectToAction("Index");
         }
     }
 }
