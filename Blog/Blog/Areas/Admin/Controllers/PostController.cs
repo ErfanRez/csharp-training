@@ -54,7 +54,10 @@ namespace Blog.Areas.Admin.Controllers
             });
 
             if (result.Status != OperationResultStatus.Success)
-                return View();
+            {
+                ModelState.AddModelError(nameof(CreatePostModel.Slug), result.Message);
+                return View(model);
+            }
 
             return RedirectToAction("Index");
         }
@@ -95,7 +98,10 @@ namespace Blog.Areas.Admin.Controllers
             });
 
             if (result.Status != OperationResultStatus.Success)
-                return View();
+            {
+                ModelState.AddModelError(nameof(CreatePostModel.Slug), result.Message);
+                return View(model);
+            }
 
             return RedirectToAction("Index");
         }
