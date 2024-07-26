@@ -1,9 +1,9 @@
-﻿using CoreLayer.Services.Users;
+﻿using CoreLayer.DTOs.Users;
+using CoreLayer.Services.Users;
+using CoreLayer.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using CoreLayer.DTOs.Users;
 using System.ComponentModel.DataAnnotations;
-using CoreLayer.Utilities;
 
 namespace Blog.Pages.Auth
 {
@@ -37,10 +37,11 @@ namespace Blog.Pages.Auth
         {
         }
 
+        [HttpPost]
         public IActionResult OnPost()
         {
 
-            if(!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 return Page();
 
