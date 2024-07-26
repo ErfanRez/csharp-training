@@ -35,20 +35,34 @@ namespace CoreLayer.Services.Posts
 
         public OperationResult EditPost(EditPostDto command)
         {
+
             var post = _context.Posts.FirstOrDefault(p => p.Id == command.Id);
+
+            var oldImage = post.Image;
             if (post == null)
             {
                 return OperationResult.NotFound();
             }
 
             PostMapper.EditMapper(command, post);
+
+            if (command.Image != null)
+            {
+                post.Image = _fileManger.SaveFile(command.Image, Directories.PostImage);
+
+                _fileManger.DeleteFile(oldImage, Directories.PostImage);
+            }
+
             _context.SaveChanges();
             return OperationResult.Success();
         }
 
         public PostDto GetPostById(int id)
         {
-            var post = _context.Posts.FirstOrDefault(p => p.Id == id);
+            var post = _context.Posts
+                .Include(p => p.Category)
+                .Include(p => p.SubCategory)
+                .FirstOrDefault(p => p.Id == id);
 
             return PostMapper.MapToDto(post);
         }

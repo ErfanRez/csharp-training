@@ -16,11 +16,15 @@ namespace CoreLayer.DTOs.Posts
 
         public int CategoryId { get; set; }
 
+        public int? SubCategoryId { get; set; }
+
         public string Image { get; set; }
 
         public int Visit { get; set; }
 
         public CategoryDto Category { get; set; }
+
+        public CategoryDto? SubCategory { get; set; }
 
         public DateTime CreatedAt { get; set; }
     }

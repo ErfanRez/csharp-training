@@ -16,6 +16,7 @@ namespace CoreLayer.Mappers
                 UserId = dto.UserId,
                 Visit = 0,
                 IsDeleted = false,
+                SubCategoryId = dto.SubCategoryId,
             };
         }
 
@@ -25,6 +26,7 @@ namespace CoreLayer.Mappers
             post.CategoryId = dto.CategoryId;
             post.Slug = dto.Slug;
             post.Title = dto.Title;
+            post.SubCategoryId = dto.SubCategoryId;
             return post;
         }
 
@@ -42,6 +44,8 @@ namespace CoreLayer.Mappers
                 Category = CategoryMapper.Map(post.Category),
                 Image = post.Image,
                 Id = post.Id,
+                SubCategoryId = post.SubCategoryId,
+                SubCategory = post.SubCategoryId != null ? CategoryMapper.Map(post.SubCategory) : null,
             };
         }
 

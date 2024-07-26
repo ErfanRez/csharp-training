@@ -25,5 +25,11 @@ namespace CoreLayer.Services.FileManager
             return fileName;
         }
 
+        public void DeleteFile(string fileName, string path)
+        {
+            var file = Path.Combine(Directory.GetCurrentDirectory(), path, fileName);
+
+            if (File.Exists(file)) File.Delete(file);
+        }
     }
 }

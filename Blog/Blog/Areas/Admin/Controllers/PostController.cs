@@ -58,5 +58,46 @@ namespace Blog.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public IActionResult Edit(int id)
+        {
+            var post = _postService.GetPostById(id);
+            if (post == null) return RedirectToAction("Index");
+
+            var model = new EditPostModel()
+            {
+                CategoryId = post.CategoryId,
+                Title = post.Title,
+                Description = post.Description,
+                Slug = post.Slug,
+                SubCategoryId = post.SubCategoryId,
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, EditPostModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = _postService.EditPost(new EditPostDto()
+            {
+                CategoryId = model.CategoryId,
+                Title = model.Title,
+                Description = model.Description,
+                Slug = model.Slug,
+                SubCategoryId = model.SubCategoryId,
+                Image = model.ImageFile,
+                Id = id,
+            });
+
+            if (result.Status != OperationResultStatus.Success)
+                return View();
+
+            return RedirectToAction("Index");
+        }
     }
 }

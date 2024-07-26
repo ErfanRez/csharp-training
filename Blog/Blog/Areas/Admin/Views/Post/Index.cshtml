@@ -1,4 +1,5 @@
 ﻿@model CoreLayer.DTOs.Posts.PostFilterDto
+@using CoreLayer.Utilities
 
 @{
     ViewData["Title"] = "Posts";
@@ -35,7 +36,7 @@
                     <tr>
                         <td>@counter</td>
                         <td>
-                            <img src="/img/@item.Image"/>
+                            <img style="max-width: 150px;" src="@Directories.GetPostImage(item.Image)"/>
                         </td>
                         <td>@item.Title</td>
                         <td>@item.Slug</td>
