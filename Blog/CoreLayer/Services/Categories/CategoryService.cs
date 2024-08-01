@@ -1,102 +1,97 @@
-﻿using CoreLayer.DTOs.Categories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CoreLayer.DTOs.Categories;
 using CoreLayer.Mappers;
 using CoreLayer.Utilities;
-using DAL.Context;
-using DAL.Entities;
+using DataLayer.Context;
+using DataLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoreLayer.Services.Categories
 {
     public class CategoryService : ICategoryService
     {
-        private readonly DB _context;
+        private readonly BlogContext _context;
 
-        public CategoryService(DB context)
+        public CategoryService(BlogContext context)
         {
             _context = context;
         }
 
         public OperationResult CreateCategory(CreateCategoryDto command)
         {
-
-            if (this.SlugExist(command.Slug.ToSlug()))
-            {
-                return OperationResult.Error("Slug exists!");
-            }
+            if (IsSlugExist(command.Slug))
+                return OperationResult.Error("Slug Is Exist");
 
             var category = new Category()
             {
-                IsDeleted = false,
                 Title = command.Title,
-                MetaTag = command.MetaTag,
-                MetaDescription = command.MetaDescription,
+                IsDelete = false,
                 ParentId = command.ParentId,
                 Slug = command.Slug.ToSlug(),
-                CreatedAt = DateTime.Now,
-
-
+                MetaTag = command.MetaTag,
+                MetaDescription = command.MetaDescription
             };
-
             _context.Categories.Add(category);
-
             _context.SaveChanges();
-
             return OperationResult.Success();
         }
 
         public OperationResult EditCategory(EditCategoryDto command)
         {
             var category = _context.Categories.FirstOrDefault(c => c.Id == command.Id);
+            if (category == null)
+                return OperationResult.NotFound();
 
-            if (category == null) return OperationResult.NotFound();
+            if (command.Slug.ToSlug() != category.Slug)
+                if (IsSlugExist(command.Slug))
+                    return OperationResult.Error("Slug Is Exist");
 
-            if (command.Slug.ToSlug() != category.Slug && this.SlugExist(command.Slug.ToSlug()))
-            {
-                return OperationResult.Error("Slug exists!");
-            }
-
-            category.Title = command.Title;
-            category.MetaTag = command.MetaTag;
             category.MetaDescription = command.MetaDescription;
             category.Slug = command.Slug.ToSlug();
+            category.Title = command.Title;
+            category.MetaTag = command.MetaTag;
 
+            //_context.Update(category);
             _context.SaveChanges();
-
             return OperationResult.Success();
         }
 
-        public List<CategoryDto> GetAllCategories()
+        public List<CategoryDto> GetAllCategory()
         {
-            return _context.Categories.Where(c => c.IsDeleted == false).Select(c => CategoryMapper.Map(c)).ToList();
+            return _context.Categories.Select(category => CategoryMapper.Map(category)).ToList();
+        }
+
+        public CategoryDto GetCategoryBy(int id)
+        {
+            var category = _context.Categories.FirstOrDefault(c => c.Id == id);
+
+            if (category == null)
+                return null;
+
+            return CategoryMapper.Map(category);
+        }
+
+        public CategoryDto GetCategoryBy(string slug)
+        {
+            var category = _context.Categories.FirstOrDefault(c => c.Slug == slug);
+            if (category == null)
+                return null;
+            return CategoryMapper.Map(category);
         }
 
         public List<CategoryDto> GetChildCategories(int parentId)
         {
-            return _context.Categories.Where(c => c.ParentId == parentId).Select(c => CategoryMapper.Map(c)).ToList();
+            return _context.Categories.Where(r=>r.ParentId==parentId)
+                .Select(category => CategoryMapper.Map(category)).ToList();
         }
 
-        public CategoryDto? GetCategoryBy(int id)
-        {
-            var category = _context.Categories.FirstOrDefault(c => c.Id == id);
-
-            if (category == null) return null;
-
-            return CategoryMapper.Map(category);
-        }
-
-        public CategoryDto? GetCategoryBy(string slug)
-        {
-            var category = _context.Categories.FirstOrDefault(c => c.Slug == slug);
-
-            if (category == null) return null;
-
-            return CategoryMapper.Map(category);
-        }
-
-        public bool SlugExist(string slug)
+        public bool IsSlugExist(string slug)
         {
             return _context.Categories.Any(c => c.Slug == slug.ToSlug());
         }
 
+       
     }
-
 }
