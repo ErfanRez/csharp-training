@@ -1,5 +1,5 @@
 ﻿using CoreLayer.DTOs.Categories;
-using DAL.Entities;
+using DataLayer.Entities;
 
 namespace CoreLayer.Mappers
 {
@@ -11,10 +11,10 @@ namespace CoreLayer.Mappers
             {
                 MetaDescription = category.MetaDescription,
                 MetaTag = category.MetaTag,
-                ParentId = category.ParentId,
                 Slug = category.Slug,
+                ParentId = category.ParentId,
                 Id = category.Id,
-                Title = category.Title,
+                Title = category.Title
             };
         }
     }

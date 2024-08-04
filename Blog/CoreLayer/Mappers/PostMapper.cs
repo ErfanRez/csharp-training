@@ -1,35 +1,26 @@
 ﻿using CoreLayer.DTOs.Posts;
-using DAL.Entities;
+using CoreLayer.Utilities;
+using DataLayer.Entities;
 
 namespace CoreLayer.Mappers
 {
     public class PostMapper
     {
-        public static Post CreateMapper(CreatePostDto dto)
+        public static Post MapCreateDtoToPost(CreatePostDto dto)
         {
             return new Post()
             {
                 Description = dto.Description,
                 CategoryId = dto.CategoryId,
-                Slug = dto.Slug,
+                Slug = dto.Slug.ToSlug(),
                 Title = dto.Title,
                 UserId = dto.UserId,
                 Visit = 0,
-                IsDeleted = false,
-                SubCategoryId = dto.SubCategoryId,
+                IsDelete = false,
+                SubCategoryId=dto.SubCategoryId,
+                IsSpecial = dto.IsSpecial
             };
         }
-
-        public static Post EditMapper(EditPostDto dto, Post post)
-        {
-            post.Description = dto.Description;
-            post.CategoryId = dto.CategoryId;
-            post.Slug = dto.Slug;
-            post.Title = dto.Title;
-            post.SubCategoryId = dto.SubCategoryId;
-            return post;
-        }
-
         public static PostDto MapToDto(Post post)
         {
             return new PostDto()
@@ -38,16 +29,26 @@ namespace CoreLayer.Mappers
                 CategoryId = post.CategoryId,
                 Slug = post.Slug,
                 Title = post.Title,
-                UserId = post.UserId,
+                UserFullName = post.User?.FullName,
                 Visit = post.Visit,
-                CreatedAt = post.CreatedAt,
-                Category = CategoryMapper.Map(post.Category),
-                Image = post.Image,
-                Id = post.Id,
+                CreationDate = post.CreationDate,
+                Category = post.Category == null ? null : CategoryMapper.Map(post.Category),
+                ImageName = post.ImageName,
+                PostId = post.Id,
                 SubCategoryId = post.SubCategoryId,
-                SubCategory = post.SubCategoryId != null ? CategoryMapper.Map(post.SubCategory) : null,
+                SubCategory = post.SubCategory == null ? null : CategoryMapper.Map(post.SubCategory),
+                IsSpecial = post.IsSpecial
             };
         }
-
+        public static Post EditPost(EditPostDto editDto, Post post)
+        {
+            post.Description = editDto.Description;
+            post.Title = editDto.Title;
+            post.CategoryId = editDto.CategoryId;
+            post.Slug = editDto.Slug.ToSlug();
+            post.SubCategoryId = editDto.SubCategoryId;
+            post.IsSpecial = editDto.IsSpecial;
+            return post;
+        }
     }
 }
