@@ -1,19 +1,20 @@
-﻿using DAL.Entities;
+﻿using DataLayer.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
-namespace DAL.Context
+namespace DataLayer.Context
 {
-    public class DB : DbContext
+    public class BlogContext : DbContext
     {
-        public DB(DbContextOptions<DB> options) : base(options) { }
+        public BlogContext(DbContextOptions<BlogContext> options) : base(options)
+        {
 
-        public DbSet<Post> Posts { get; set; }
-
-        public DbSet<User> Users { get; set; }
-
-        public DbSet<PostComment> PostComments { get; set; }
+        }
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<PostComment> PostComments { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,5 +25,4 @@ namespace DAL.Context
             base.OnModelCreating(modelBuilder);
         }
     }
-
 }

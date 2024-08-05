@@ -1,51 +1,42 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace DAL.Entities
+namespace DataLayer.Entities
 {
-    // [Table("posts", Schema = "dbo")]
-    public class Post : BaseEntity
+    public class Post: BaseEntity
     {
-
+        public int UserId { get; set; }
+        public int CategoryId { get; set; }
+        public int? SubCategoryId { get; set; }
         [Required]
+        [MaxLength(300)]
         public string Title { get; set; }
-
+        [Required]
+        [MaxLength(400)]
+        public string Slug { get; set; }
         [Required]
         public string Description { get; set; }
-
-        [AllowNull]
+        public string ImageName { get; set; }
         public int Visit { get; set; }
-
-        [Required]
-        public string Slug { get; set; }
-
-        [AllowNull]
-        public string? Image { get; set; }
-
+        public bool IsSpecial { get; set; }
 
         #region Relations
-
-        public int UserId { get; set; }
 
         [ForeignKey("UserId")]
         public User User { get; set; }
 
-        public int CategoryId { get; set; }
-
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
-        public int? SubCategoryId { get; set; }
-
         [ForeignKey("SubCategoryId")]
         public Category SubCategory { get; set; }
-
-        [AllowNull]
         public ICollection<PostComment> PostComments { get; set; }
 
         #endregion
-
     }
-
 }
