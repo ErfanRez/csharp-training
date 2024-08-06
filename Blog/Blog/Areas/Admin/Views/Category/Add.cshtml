@@ -1,57 +1,38 @@
-﻿@model Areas.Admin.Models.Categories.CreateCategoryModel
+﻿@model Web.Areas.Admin.Models.Categories.CreateCategoryViewModel
 @{
-    ViewData["Title"] = "Add Category";
-    ViewData["Selected"] = "category";
-    int counter = 1;
-}
+    ViewData["title"] = "افزودن دسته بندی";
+    ViewData["selected"] = "category";
 
+}
 <section class="content-header">
     <h1>
-        @ViewData["Title"]
+        @ViewData["title"]
     </h1>
     <ol class="breadcrumb">
         <li><a asp-area="Admin" asp-controller="Home" asp-action="Index"><i class="fa fa-dashboard"></i> خانه</a></li>
-        <li><a asp-area="Admin" asp-controller="Category" asp-action="Index"><i class="fa fa-dashboard"></i>Categories</a></li>
-        <li class="active">@ViewData["Title"]</li>
+        <li><a asp-area="Admin" asp-controller="Category" asp-action="Index">دسته بندی ها</a></li>
+        <li class="active">@ViewData["title"]</li>
     </ol>
 </section>
-
-<section>
-    <form class="box box-body row"method="post" asp-action="Add" asp-area="Admin" asp-controller="Category">
-        <input type="hidden" asp-for="ParentId"/>
-        <div>
+<section class="content">
+    <form class="box box-danger" method="post" asp-area="Admin" asp-controller="Category" asp-action="Add">
+        <input type="hidden" asp-for="ParentId" />
+        <div class="box-body row">
             <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="Title"></label>
-                    <input asp-for="Title" class="form-control"/>
-                    <span asp-validation-for="Title"></span>
-                </div>
+                @Html.EditorFor(m => m.Title)
             </div>
             <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="Slug"></label>
-                    <input asp-for="Slug" class="form-control" />
-                    <span asp-validation-for="Slug"></span>
-                </div>
+                @Html.EditorFor(m => m.Slug)
             </div>
             <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="MetaTag"></label>
-                    <input asp-for="MetaTag" class="form-control" />
-                    <span asp-validation-for="MetaTag"></span>
-                </div>
+                @Html.EditorFor(m => m.MetaTag)
             </div>
             <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="MetaDescription"></label>
-                    <textarea asp-for="MetaDescription" class="form-control"></textarea>
-                    <span asp-validation-for="MetaDescription"></span>
-                </div>
+                @Html.EditorFor(m => m.MetaDescription)
             </div>
         </div>
         <div class="box-footer">
-            <button class="btn btn-success" type="submit">Save</button>
+            <button class="btn btn-success" type="submit">ثبت اطلاعات</button>
         </div>
     </form>
-
 </section>

@@ -1,121 +1,88 @@
-﻿@model Areas.Admin.Models.Posts.EditPostModel
-@inject CoreLayer.Services.Categories.ICategoryService _categoryService
-
+﻿@model Web.Areas.Admin.Models.Posts.EditPostViewModel
+@using CoreLayer.Services.Categories;
+@inject ICategoryService _categoreyService;
 @{
-    ViewData["Title"] = "Edit Post";
-    ViewData["Selected"] = "post";
-    var categories = _categoryService.GetAllCategories();
+    ViewData["title"] = "ویرایش  مقاله";
+    ViewData["selected"] = "posts";
+    var categories = _categoreyService.GetAllCategory();
 }
-
 <section class="content-header">
     <h1>
-        @ViewData["Title"]
+        @ViewData["title"]
     </h1>
     <ol class="breadcrumb">
         <li><a asp-area="Admin" asp-controller="Home" asp-action="Index"><i class="fa fa-dashboard"></i> خانه</a></li>
-        <li><a asp-area="Admin" asp-controller="Post" asp-action="Index"><i class="fa fa-dashboard"></i>Posts</a></li>
-        <li class="active">@ViewData["Title"]</li>
+        <li><a asp-area="Admin" asp-controller="Post" asp-action="Index">مقالات</a></li>
+        <li class="active">@ViewData["title"]</li>
     </ol>
 </section>
-
 <section class="content">
-    <form class="box box-body row" method="post" asp-action="Edit" asp-area="Admin" asp-controller="Post" enctype="multipart/form-data">
-        <div>
+    <form class="box box-danger" method="post" asp-area="Admin" asp-controller="Post" asp-action="Edit" enctype="multipart/form-data">
+        <div class="box-body row">
             <div class="col-md-6">
+                @Html.EditorFor(m => m.Title)
+            </div>
+            <div class="col-md-6">
+                @Html.EditorFor(m => m.Slug)
+            </div>
+            <div class="col-md-12">
+                @Html.EditorFor(m => m.Description)
+            </div>
+            <div class="col-md-6 ">
                 <div class="form-group">
-                    <label asp-for="Title"></label>
-                    <input asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title"></span>
+                    <label asp-for="CategoryId"></label>
+                    <select asp-for="CategoryId" class="form-control">
+                        <option value="null">انتخاب کنید</option>
+
+                        @foreach (var item in categories.Where(c => c.ParentId == null))
+                        {
+                            <option value="@item.Id">@item.Title</option>
+                        }
+                    </select>
+                    <span asp-validation-for="CategoryId"></span>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label asp-for="Slug"></label>
-                    <input asp-for="Slug" class="form-control" />
-                    <span asp-validation-for="Slug"></span>
+                    <label asp-for="SubCategoryId"></label>
+                    <select asp-for="SubCategoryId" class="form-control">
+                        <option value="0">انتخاب کنید</option>
+                        @foreach (var item in categories.Where(c => c.ParentId == Model.CategoryId))
+                        {
+                            <option value="@item.Id">@item.Title</option>
+                        }
+                    </select>
+                    <span asp-validation-for="SubCategoryId"></span>
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="form-group">
-                    <label asp-for="Description"></label>
-                    <textarea asp-for="Description" class="form-control" id="ckEditor"></textarea>
-                    <span asp-validation-for="Description"></span>
-                </div>
+                @Html.EditorFor(m => m.ImageFile)
             </div>
             <div class="col-md-6">
-                <div class="form-group">
-                    <div>
-                        <label asp-for="CategoryId"></label>
-                        <select asp-for="CategoryId" class="form-control">
-                            <option value="" disabled selected>Select</option>
-                            @foreach (var item in categories.Where(c => c.ParentId == null))
-                            {
-                                <option value="@item.Id">
-                                    @item.Title
-                                </option>
-                            }
-                        </select>
-                        <span asp-validation-for="CategoryId"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <div>
-                        <label asp-for="SubCategoryId"></label>
-                        <select asp-for="SubCategoryId" class="form-control">
-                            <option selected disabled>Select</option>
-                            @foreach (var item in categories.Where(c => c.ParentId == Model.CategoryId))
-                            {
-                                <option value="@item.Id">
-                                    @item.Title
-                                </option>
-                            }
-                        </select>
-                        <span asp-validation-for="SubCategoryId"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label asp-for="ImageFile"></label>
-                    <input type="file" asp-for="ImageFile" class="form-control" />
-                    <span asp-validation-for="ImageFile"></span>
-                </div>
+                @Html.EditorFor(m => m.IsSpecial)
             </div>
         </div>
         <div class="box-footer">
-            <button class="btn btn-success" type="submit">Save</button>
+            <button class="btn btn-success" type="submit">ثبت اطلاعات</button>
         </div>
     </form>
-
 </section>
 
-
-
-
-@section scripts {
+@section scripts{
     <script>
-        document.getElementById("CategoryId").addEventListener("change", (e) => {
-            var categoryId = e.target.value;
-            var subCategorySelect = document.getElementById("SubCategoryId");
+        $("#CategoryId").change(function () {
+            var categoryId = $(this).val();
+            $.ajax({
+                url: "/admin/category/GetChildCategories?parentId=" + categoryId,
+                type: "get"
+            }).done(function (data) {
+                $("#SubCategoryId").html(`<option value='0'>انتخاب کنید</option>`);
 
-            subCategorySelect.innerHTML = '';
-
-            fetch("/admin/category/GetChildCategories?parentId=" + categoryId)
-                .then(response => response.json())
-                .then(data => {
-
-
-
-                    data?.forEach(category => {
-                        var option = document.createElement("option");
-                        option.value = category.id;
-                        option.textContent = category.title;
-                        subCategorySelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error:', error));
-        });
+                for (var i in data) {
+                    var category = data[i];
+                    $("#SubCategoryId").append(`<option value='${category.id}'>${category.title}</option>`);
+                }
+            });
+        })
     </script>
 }

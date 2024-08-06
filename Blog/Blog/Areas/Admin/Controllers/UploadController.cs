@@ -1,26 +1,30 @@
-﻿using CoreLayer.Services.FileManager;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using CoreLayer.Services.FileManager;
 using CoreLayer.Utilities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
-namespace Blog.Areas.Admin.Controllers
+namespace Web.Areas.Admin.Controllers
 {
     public class UploadController : Controller
     {
-        private readonly IFileManager _FileManager;
+        private readonly IFileManager _fileManager;
 
         public UploadController(IFileManager fileManager)
         {
-            _FileManager = fileManager;
+            _fileManager = fileManager;
         }
-
         [Route("/Upload/Article")]
-        [Authorize]
+
         public IActionResult UploadArticleImage(IFormFile upload)
         {
-            if (upload == null) return BadRequest();
+            if (upload == null)
+                BadRequest();
 
-            var imageName = _FileManager.SaveFile(upload, Directories.PostContentImage);
+            var imageName = _fileManager.SaveFileAndReturnName(upload, Directories.PostContentImage);
 
             return Json(new { Uploaded = true, url = Directories.GetPostContentImage(imageName) });
         }

@@ -1,17 +1,20 @@
-﻿using CoreLayer.Services.Users;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using CoreLayer.DTOs.Users;
+using CoreLayer.Services.Users;
 using CoreLayer.Utilities;
 using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Blog.Pages.Auth
+namespace Web.Pages.Auth
 {
     [ValidateAntiForgeryToken]
-    [BindProperties]
     public class LoginModel : PageModel
     {
         private readonly IUserService _userService;
@@ -21,54 +24,53 @@ namespace Blog.Pages.Auth
             _userService = userService;
         }
 
-        #region Properties
         [Required(ErrorMessage = "نام کاربری را وارد کنید")]
-        public string Username { get; set; }
+        [BindProperty]
+        public string UserName { get; set; }
 
         [Required(ErrorMessage = "کلمه عبور را وارد کنید")]
-        [MinLength(6, ErrorMessage = "کلمه عبور معتبر نیست")]
+        [MinLength(6, ErrorMessage = "کلمه عبور باید بیشتر از 5 کاراکتر باشد")]
+        [BindProperty]
         public string Password { get; set; }
 
-        #endregion
         public void OnGet()
         {
         }
 
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
                 return Page();
             }
 
             var user = _userService.LoginUser(new LoginUserDto()
             {
-                UserName = Username,
                 Password = Password,
+                UserName = UserName
             });
 
-            if(user == null)
+            if (user == null)
             {
-                ModelState.AddModelError("Username", "User not found!");
+                ModelState.AddModelError("UserName", "کاربری با مشخصات وارد شده یافت نشد");
                 return Page();
             }
 
             List<Claim> claims = new List<Claim>()
             {
-                new Claim("Test", "Test"),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Fullname.ToString()),
+                new Claim(ClaimTypes.NameIdentifier,user.UserId.ToString()),
+                new Claim(ClaimTypes.Name,user.FullName),
+                new Claim(ClaimTypes.Role,user.Role.ToString()),
             };
+
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var claimPrincipal = new ClaimsPrincipal(identity);
             var properties = new AuthenticationProperties()
             {
-                AllowRefresh = true,
-                IsPersistent = true,
+                IsPersistent = true
             };
             HttpContext.SignInAsync(claimPrincipal, properties);
-
-            return RedirectToPage("../Index"); // return Redirect("/Index");
+            return RedirectToPage("../Index");
         }
     }
 }

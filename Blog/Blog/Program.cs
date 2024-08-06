@@ -1,27 +1,41 @@
+using CoreLayer.Services;
 using CoreLayer.Services.Categories;
+using CoreLayer.Services.Comments;
 using CoreLayer.Services.FileManager;
 using CoreLayer.Services.Posts;
 using CoreLayer.Services.Users;
-using DAL.Context;
+using DataLayer.Context;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
+var services = builder.Services;
+services.AddRazorPages()
+                .AddRazorRuntimeCompilation();
 
-// Add services to the container.
-builder.Services.AddRazorPages();
-
-// Add MVC services.
-builder.Services.AddControllersWithViews();
-
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IPostService, PostService>();
-builder.Services.AddTransient<IFileManager, FileManager>();
-builder.Services.AddAuthentication(option =>
+services.AddControllersWithViews();
+services.AddScoped<IUserService, UserService>();
+services.AddScoped<ICategoryService, CategoryService>();
+services.AddTransient<IPostService, PostService>();
+services.AddTransient<IFileManager, FileManager>();
+services.AddTransient<ICommentService, CommentService>();
+services.AddTransient<IMainPageService, MainPageService>();
+services.AddDbContext<BlogContext>(option =>
 {
-    option.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme; // "Cookies"
+    option.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+});
+services.AddAuthorization(option =>
+{
+    option.AddPolicy("AdminPolicy", builder =>
+    {
+        builder.RequireRole("Admin");
+    });
+});
+
+services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     option.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     option.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 }).AddCookie(option =>
@@ -29,22 +43,17 @@ builder.Services.AddAuthentication(option =>
     option.LoginPath = "/Auth/Login";
     option.LogoutPath = "/Auth/Logout";
     option.ExpireTimeSpan = TimeSpan.FromDays(30);
-});
-
-builder.Services.AddDbContext<DB>(option =>
-{
-    option.UseSqlServer(configuration.GetConnectionString("Default"));
+    option.AccessDeniedPath = "/";
 });
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (!builder.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/ErrorHandler/500");
     app.UseHsts();
 }
+
+app.UseStatusCodePagesWithReExecute("/ErrorHandler/{0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -53,6 +62,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 // Map controller routes for MVC Areas
 app.MapControllerRoute(

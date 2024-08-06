@@ -1,13 +1,16 @@
-﻿using Blog.Areas.Admin.Models.Categories;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using CoreLayer.DTOs.Categories;
 using CoreLayer.Services.Categories;
 using CoreLayer.Utilities;
-using Microsoft.AspNetCore.Mvc;
+using Web.Areas.Admin.Models.Categories;
 
-namespace Blog.Areas.Admin.Controllers
+namespace Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class CategoryController : Controller
+    public class CategoryController : AdminControllerBase
     {
         private readonly ICategoryService _categoryService;
 
@@ -15,76 +18,68 @@ namespace Blog.Areas.Admin.Controllers
         {
             _categoryService = categoryService;
         }
-
         public IActionResult Index()
         {
-            return View(_categoryService.GetAllCategories());
+            return View(_categoryService.GetAllCategory());
         }
 
         [Route("/admin/category/add/{parentId?}")]
         public IActionResult Add(int? parentId)
         {
-
             return View();
         }
 
         [HttpPost("/admin/category/add/{parentId?}")]
-        public IActionResult Add(int? parentId, CreateCategoryModel categoryModel)
+        public IActionResult Add(int? parentId, CreateCategoryViewModel createViewModel)
         {
-            categoryModel.ParentId = parentId;
-            var result = _categoryService.CreateCategory(categoryModel.MapToDto());
+            createViewModel.ParentId = parentId;
+            var result = _categoryService.CreateCategory(createViewModel.MapToDto());
 
-            if (result.Status != OperationResultStatus.Success)
-            {
-                ModelState.AddModelError(nameof(categoryModel.Title), result.Message);
-                return View();
-            }
-
-            return RedirectToAction("Index");
+            return RedirectAndShowAlert(result, RedirectToAction("Index"));
         }
-
 
         public IActionResult Edit(int id)
         {
             var category = _categoryService.GetCategoryBy(id);
-            if (category == null) return RedirectToAction("Index");
-            var model = new EditCategoryModel()
+            if (category == null)
+                return RedirectToAction("Index");
+
+            var model = new EditCategoryViewModel()
             {
-                Title = category.Title,
                 Slug = category.Slug,
                 MetaTag = category.MetaTag,
                 MetaDescription = category.MetaDescription,
-            };
+                Title = category.Title,
 
+            };
             return View(model);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, EditCategoryModel model)
+        public IActionResult Edit(int id, EditCategoryViewModel editModel)
         {
             var result = _categoryService.EditCategory(new EditCategoryDto()
             {
-                Id = id,
-                Title = model.Title,
-                Slug = model.Slug,
-                MetaTag = model.MetaTag,
-                MetaDescription = model.MetaDescription,
+                Slug = editModel.Slug,
+                MetaTag = editModel.MetaTag,
+                MetaDescription = editModel.MetaDescription,
+                Title = editModel.Title,
+                Id = id
             });
-
             if (result.Status != OperationResultStatus.Success)
             {
-                ModelState.AddModelError(nameof(model.Title), result.Message);
+                ModelState.AddModelError(nameof(editModel.Slug), result.Message);
                 return View();
             }
             return RedirectToAction("Index");
         }
 
+
         public IActionResult GetChildCategories(int parentId)
         {
-            var category = _categoryService.GetChildCategories(parentId);
+            var categoy = _categoryService.GetChildCategories(parentId);
 
-            return new JsonResult(category);
+            return new JsonResult(categoy);
         }
     }
 }
